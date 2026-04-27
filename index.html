@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Rocío Robles Mendoza · 50 Años | Invitación Especial</title>
+    <!-- Google Fonts: Tipografía fina y festiva -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (iconos) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fef7f0;  /* beige suave */
+            font-family: 'Quicksand', sans-serif;
+            color: #4e3e2e;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Decoración de fondo sutil con destellos y flores */
+        .bg-floral {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: radial-gradient(circle at 20% 40%, rgba(255,215,0,0.03) 2%, transparent 2.5%),
+                              radial-gradient(circle at 80% 70%, rgba(245, 205, 170, 0.05) 1.8%, transparent 2.2%);
+            background-size: 55px 55px, 70px 70px;
+        }
+
+        /* contenedor principal */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* tarjeta principal con elegancia */
+        .invitation-card {
+            background: rgba(255, 254, 250, 0.92);
+            backdrop-filter: blur(1px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,235,205,0.6);
+            overflow: hidden;
+            padding: 2rem 2rem 3rem;
+            transition: all 0.4s ease;
+        }
+
+        /* animaciones suaves */
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes softGlow {
+            0% { text-shadow: 0 0 0px rgba(212,175,55,0); }
+            50% { text-shadow: 0 0 8px rgba(212,175,55,0.4); }
+            100% { text-shadow: 0 0 0px rgba(212,175,55,0); }
+        }
+
+        .animate-item {
+            animation: fadeUp 0.8s ease forwards;
+            opacity: 0;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.25s; }
+        .delay-3 { animation-delay: 0.4s; }
+        .delay-4 { animation-delay: 0.55s; }
+        .delay-5 { animation-delay: 0.7s; }
+
+        .gold-text {
+            color: #bf9b4b;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 500;
+            color: #b48c42;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+        h1 small {
+            font-size: 1.4rem;
+            display: block;
+            color: #b89a6a;
+            font-weight: 300;
+            font-family: 'Quicksand', sans-serif;
+        }
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            border-left: 4px solid #e4c68f;
+            padding-left: 1rem;
+            margin: 1.8rem 0 1rem;
+            color: #5c4a34;
+        }
+        .invite-line {
+            font-size: 1.3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin: 1rem 0;
+            color: #ac8e62;
+        }
+        .mensaje-emotivo {
+            background: #fffaf3;
+            padding: 1.8rem;
+            border-radius: 2rem;
+            margin: 1.8rem 0;
+            font-size: 1.1rem;
+            line-height: 1.65;
+            font-style: normal;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02), inset 0 0 0 1px #f9efdf;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+        }
+        .details-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+        .detail-card {
+            background: #fffcf7;
+            border-radius: 2rem;
+            padding: 1.2rem 1.8rem;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 0 0 1px #ffe8cf;
+            transition: all 0.3s;
+        }
+        .detail-card i {
+            font-size: 2rem;
+            color: #dbb45c;
+            margin-bottom: 0.6rem;
+        }
+        .detail-card .label {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #b9976b;
+        }
+        .detail-card .value {
+            font-size: 1.3rem;
+            font-weight: 500;
+            font-family: 'Cormorant Garamond', serif;
+            margin-top: 0.3rem;
+        }
+        .fecha-destacada {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #c3a161;
+            letter-spacing: 1px;
+        }
+        .btn-maps {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #e8d9c4;
+            color: #5c3e1f;
+            padding: 0.9rem 2rem;
+            border-radius: 3rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.25s;
+            margin-top: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-maps:hover {
+            background: #decaab;
+            transform: scale(1.02);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+        }
+        /* Botón de WhatsApp exclusivo y limpio */
+        .wsp-confirm-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            padding: 1rem 2.2rem;
+            border-radius: 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 0.8rem 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 7px 14px rgba(37,211,102,0.25);
+            border: none;
+            cursor: pointer;
+        }
+        .wsp-confirm-btn:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+        }
+        /* Foto elegante */
+        .foto-section {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 2rem;
+        }
+        .foto-enmarcada {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15), 0 0 0 6px white, 0 0 0 12px #f3e5ce;
+            transition: all 0.3s;
+        }
+        /* Sección especial */
+        .special-quote {
+            background: linear-gradient(135deg, #fff6ea, #fffbf4);
+            border-radius: 2rem;
+            padding: 1.6rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-style: italic;
+            font-size: 1.2rem;
+            border: 1px solid #eedcbe;
+        }
+        /* RSVP simplificado */
+        .rsvp-area {
+            background: #fff9f0;
+            padding: 1.8rem;
+            border-radius: 2rem;
+            margin: 2rem 0 1rem;
+            text-align: center;
+        }
+        /* Countdown */
+        .countdown-box {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+            flex-wrap: wrap;
+        }
+        .time-unit {
+            background: #fff5ea;
+            border-radius: 2rem;
+            padding: 0.6rem 1rem;
+            min-width: 70px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .time-number {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #be9b56;
+            line-height: 1;
+        }
+        .time-label {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        /* música */
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(255,252,245,0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 0.7rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 99;
+            border: 1px solid #f7e5cf;
+        }
+        .music-control button {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #b68b40;
+        }
+        /* Responsive */
+        @media (max-width: 680px) {
+            .container {
+                padding: 1rem;
+            }
+            .invitation-card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .foto-enmarcada {
+                width: 150px;
+                height: 150px;
+            }
+            .detail-card .value {
+                font-size: 1rem;
+            }
+            .fecha-destacada {
+                font-size: 1.3rem;
+            }
+            .wsp-confirm-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #cfbb99;
+        }
+        .floral-deco {
+            font-size: 1.8rem;
+            text-align: center;
+            opacity: 0.7;
+            letter-spacing: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-floral"></div>
+<div class="container">
+    <div class="invitation-card">
+        <!-- foto de la festejada - espacio para imagen elegante con temática dorada -->
+        <div class="foto-section animate-item">
+            <img src="https://placehold.co/400x400/f9efe2/c7a86b?text=Rocío+✨" alt="Rocío Robles Mendoza" class="foto-enmarcada" id="fotoRocio">
+            <!-- Sugerencia amigable: Reemplazar "placehold.co" por la URL de la foto real de Rocío -->
+        </div>
+        
+        <div class="animate-item delay-1">
+            <h1>Rocío Robles Mendoza <small>· 50 primaveras ·</small></h1>
+        </div>
+        <div class="invite-line animate-item delay-1 gold-text">
+            ✧ ¡Estás cordialmente invitado! ✧
+        </div>
+        
+        <!-- Mensaje emotivo -->
+        <div class="mensaje-emotivo animate-item delay-2">
+            « Queridos familiares y amigos del alma:  
+            <br><br>
+            Han sido parte fundamental de mi historia, cómplices de risas, abrazos y momentos que guardo en el corazón.  
+            Cumplir 50 años es celebrar medio siglo de vida, pero sobre todo, es honrar cada lazo que construimos juntos.  
+            Por eso, deseo rodearme de los seres más queridos, de ustedes, que con su cariño han llenado de luz mi camino.  
+            Les invito con inmensa alegría a compartir una velada llena de gratitud, música y calidez familiar.  
+            ¡Será un honor tenerlos a mi lado en este nuevo ciclo! Con todo el cariño, <strong>Rocío</strong> »
+        </div>
+        
+        <!-- Detalles del evento con hora actualizada a partir de las 3:00pm -->
+        <div class="animate-item delay-3">
+            <h2><i class="fas fa-calendar-alt gold-text" style="margin-right: 10px;"></i> Celebración 50 Años</h2>
+        </div>
+        <div class="details-grid animate-item delay-3">
+            <div class="detail-card">
+                <i class="fas fa-calendar-day"></i>
+                <div class="label">Fecha</div>
+                <div class="value fecha-destacada">Sábado 6 de junio 2026</div>
+            </div>
+            <div class="detail-card">
+                <i class="fas fa-clock"></i>
+                <div class="label">Hora</div>
+                <div class="value">3:00 p.m. - 9:00 p.m.</div>
+            </div>
+            <div class="detail-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="label">Salón</div>
+                <div class="value">LOS SEÑORIOS</div>
+                <a href="https://maps.app.goo.gl/CXTKxezFszojJGJP7" target="_blank" class="btn-maps" style="margin-top: 12px; font-size: 0.8rem; padding: 0.4rem 1rem;"><i class="fab fa-google"></i> Ver mapa</a>
+            </div>
+        </div>
+        
+        <!-- Cuenta regresiva actualizada con la nueva hora 3:00 PM (15:00 hrs) -->
+        <div class="animate-item delay-4">
+            <div style="text-align: center; margin: 0.5rem 0 0.2rem;">
+                <span class="gold-text"><i class="far fa-hourglass-half"></i> Tiempo para celebrar juntos</span>
+            </div>
+            <div id="countdown" class="countdown-box"></div>
+        </div>
+        
+        <!-- Sección especial: resaltar importancia de compartir -->
+        <div class="special-quote animate-item delay-4">
+            <i class="fas fa-heart" style="color: #e9c48b; margin-right: 6px;"></i>  
+            "Compartir estos 50 años contigo es el mejor de los regalos. Porque la vida se ilumina cuando los que amamos están cerca."
+            <div class="floral-deco">✧ ✿ ✧</div>
+        </div>
+        
+        <!-- Confirmación asistencia (RSVP) ÚNICAMENTE BOTÓN WHATSAPP - SIN TEXTOS ADICIONALES NI CAMPOS -->
+        <div class="rsvp-area animate-item delay-5">
+            <i class="fab fa-whatsapp" style="font-size: 2rem; color: #25D366;"></i>
+            <!-- Botón exclusivo que lleva al enlace de confirmación oficial -->
+            <a href="https://wa.link/zizune" target="_blank" class="wsp-confirm-btn" id="whatsappConfirmBtn">
+                <i class="fab fa-whatsapp fa-lg"></i> Confirmar asistencia vía WhatsApp
+            </a>
+            <!-- Sin mensajes adicionales, completamente limpio -->
+        </div>
+        
+        <footer class="animate-item delay-5">
+            <span>✨ Por favor confirma antes del 20 de mayo ✨</span><br>
+            ¡Les esperamos con los brazos abiertos y mucha gratitud!
+        </footer>
+    </div>
+</div>
+
+<!-- Control de música (opcional) con melodía elegante y emotiva -->
+<div class="music-control" id="musicWidget">
+    <i class="fas fa-music" style="color:#bc9a60;"></i>
+    <span style="font-size: 0.75rem;">Melodía especial</span>
+    <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+</div>
+
+<script>
+    // ---------- COUNTDOWN (6 de junio 2026 a las 15:00 hrs, hora CDMX o local) ----------
+    function getCountdown() {
+        // La hora actualizada: 3:00 PM (15:00 horas)
+        const targetDate = new Date("June 6, 2026 15:00:00").getTime();
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+        if (diff <= 0) {
+            document.getElementById("countdown").innerHTML = '<div class="time-unit"><div class="time-number">🎉</div><div class="time-label">¡Es hoy! Celebremos</div></div>';
+            return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (86400000)) / (3600000));
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        
+        document.getElementById("countdown").innerHTML = `
+            <div class="time-unit"><div class="time-number">${days}</div><div class="time-label">Días</div></div>
+            <div class="time-unit"><div class="time-number">${hours}</div><div class="time-label">Horas</div></div>
+            <div class="time-unit"><div class="time-number">${minutes}</div><div class="time-label">Minutos</div></div>
+            <div class="time-unit"><div class="time-number">${seconds}</div><div class="time-label">Segundos</div></div>
+        `;
+    }
+    setInterval(getCountdown, 1000);
+    getCountdown();
+
+    // ---------- MÚSICA DE FONDO: Canción elegante y diferente (piano romántico y festivo) ----------
+    // Se reemplaza por una pista más cálida y emotiva (SoundHelix - pieza armónica con estilo alegre pero suave)
+    const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3');
+    audio.loop = true;
+    audio.volume = 0.28;
+    let isPlaying = false;
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const iconSpan = playPauseBtn.querySelector("i");
+    
+    playPauseBtn.addEventListener("click", function() {
+        if (!isPlaying) {
+            audio.play().then(() => {
+                isPlaying = true;
+                iconSpan.className = "fas fa-pause";
+            }).catch(err => {
+                // En caso de bloqueo por política de autoplay, el clic del usuario ya debería permitirlo
+                audio.play();
+                isPlaying = true;
+                iconSpan.className = "fas fa-pause";
+            });
+        } else {
+            audio.pause();
+            isPlaying = false;
+            iconSpan.className = "fas fa-play";
+        }
+    });
+    
+    // Pequeño efecto para indicar hover y suavidad visual en botón de WhatsApp
+    const wspBtn = document.getElementById("whatsappConfirmBtn");
+    if(wspBtn) {
+        wspBtn.addEventListener("mouseenter", () => {
+            wspBtn.style.transform = "scale(1.02)";
+        });
+        wspBtn.addEventListener("mouseleave", () => {
+            wspBtn.style.transform = "scale(1)";
+        });
+    }
+    
+    // Efecto de brillo sutil en el título
+    const mainTitle = document.querySelector("h1");
+    if(mainTitle) {
+        setInterval(() => {
+            mainTitle.style.animation = "softGlow 2s infinite ease";
+        }, 200);
+    }
+    
+    // Animaciones decorativas en los detalles
+    const detailIcons = document.querySelectorAll(".detail-card i");
+    detailIcons.forEach(icon => {
+        icon.addEventListener("mouseenter", () => {
+            icon.style.transform = "scale(1.1)";
+            icon.style.transition = "0.2s";
+        });
+        icon.addEventListener("mouseleave", () => {
+            icon.style.transform = "scale(1)";
+        });
+    });
+    
+    // Interacción sutil con la foto
+    const foto = document.querySelector(".foto-enmarcada");
+    if(foto) {
+        foto.addEventListener("mouseenter", () => {
+            foto.style.transform = "scale(1.02)";
+            foto.style.transition = "0.3s";
+        });
+        foto.addEventListener("mouseleave", () => {
+            foto.style.transform = "scale(1)";
+        });
+    }
+    
+    // Mensaje de consola amigable
+    console.log("🌸 Invitación 50 años Rocío Robles - Hora actualizada: 3:00 p.m. | RSVP vía WhatsApp 🌸");
+</script>
+</body>
+</html>
