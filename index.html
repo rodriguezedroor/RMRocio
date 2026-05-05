@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Rocío Robles Mendoza · 50 Años | Invitación Especial</title>
+    <title>Rocío Robles Mendoza · 50 Años | Invitación Musical</title>
     <!-- Google Fonts: Elegancia refinada -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 -->
@@ -315,17 +315,18 @@
             position: fixed;
             bottom: 25px;
             right: 25px;
-            background: rgba(255, 250, 240, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 250, 240, 0.96);
+            backdrop-filter: blur(12px);
             border-radius: 60px;
             padding: 0.6rem 1.3rem 0.6rem 1rem;
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
             z-index: 99;
             border: 1px solid #ffe2bd;
             font-family: 'Quicksand', sans-serif;
+            transition: all 0.2s;
         }
         .music-control button {
             background: #f0e0cb;
@@ -345,6 +346,14 @@
             background: #e0cbaf;
             transform: scale(1.05);
         }
+        .music-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            max-width: 130px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         footer {
             text-align: center;
             margin-top: 2.5rem;
@@ -362,6 +371,8 @@
             .fecha-destacada { font-size: 1.3rem; }
             .wsp-confirm-btn { padding: 0.8rem 1.5rem; font-size: 1rem; }
             .time-number { font-size: 1.5rem; }
+            .music-label { display: none; }
+            .music-control { padding: 0.5rem 1rem; }
         }
     </style>
 </head>
@@ -370,7 +381,8 @@
 <div class="container">
     <div class="invitation-card">
         <div class="foto-section animate-item">
-             <img src="rocio.jpeg" alt="Rocío Robles Mendoza" class="foto-enmarcada" id="fotoRocio" onerror="this.onerror=null; this.src='https://placehold.co/400x400?text=Roc%C3%ADo&font=montserrat';">
+             <!-- si la imagen local no existe, se muestra un placeholder con el nombre -->
+             <img src="rocio.jpeg" alt="Rocío Robles Mendoza" class="foto-enmarcada" id="fotoRocio" onerror="this.onerror=null; this.src='https://placehold.co/400x400?text=Roc%C3%ADo+50&font=montserrat';">
         </div>
         
         <div class="animate-item delay-1">
@@ -433,7 +445,6 @@
             <a href="https://wa.link/zizune" target="_blank" class="wsp-confirm-btn" id="whatsappConfirmBtn">
                 <i class="fab fa-whatsapp fa-lg"></i> Asistiré a la fiesta
             </a>
-            <!-- Sin texto adicional, elegante -->
         </div>
         
         <footer class="animate-item delay-5">
@@ -443,98 +454,220 @@
     </div>
 </div>
 
+<!-- Widget de música que integra el tema de YouTube (canción solicitada) -->
 <div class="music-control" id="musicWidget">
-    <i class="fas fa-music" style="color:#dba562;"></i>
-    <span style="font-size: 0.75rem; font-weight:500;">Canción especial</span>
+    <i class="fab fa-youtube" style="color:#c4302b;"></i>
+    <span class="music-label" id="songTitle">Canción especial</span>
     <button id="playPauseBtn"><i class="fas fa-play"></i></button>
 </div>
 
 <script>
-    (function(){
-        // COUNTDOWN actualizado: 6 de junio 2026 - 15:00 hrs (hora CDMX asumida)
-        function updateCountdown() {
-            const target = new Date("June 6, 2026 15:00:00 GMT-0600").getTime(); // CDMX offset
-            const now = new Date().getTime();
-            const diff = target - now;
-            const container = document.getElementById("countdown");
-            if (!container) return;
-            if (diff <= 0) {
-                container.innerHTML = '<div class="time-unit"><div class="time-number">🎉✨</div><div class="time-label">¡Hoy es el día!</div></div><div class="time-unit"><div class="time-number">Celebremos</div><div class="time-label">Con Alegría</div></div>';
-                return;
+    // ====================================================
+    // CANCIÓN SOLICITADA: VIDEO DE YOUTUBE (link proporcionado)
+    // Se integra mediante YouTube IFrame API, con control manual y respeto a políticas
+    // ====================================================
+    let player;
+    let isPlayerReady = false;
+    let isPlaying = false;
+    const playPauseButton = document.getElementById('playPauseBtn');
+    const iconPlay = playPauseButton.querySelector('i');
+    const songTitleSpan = document.getElementById('songTitle');
+    
+    // Título personalizado para la canción (puedes cambiarlo)
+    songTitleSpan.innerText = "🎵 La Canción de los 50";
+    
+    // Cargar la API de YouTube de forma asíncrona
+    let tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    
+    window.onYouTubeIframeAPIReady = function() {
+        // El video es exactamente el link: https://www.youtube.com/watch?v=vLWDoovMI1Q
+        // Se usa el ID del video: vLWDoovMI1Q
+        player = new YT.Player('musicWidget', {  // no usamos un div separado, lo haremos dinámico pero invisible? 
+            // Para ocultar el reproductor visual pero controlarlo, necesitamos un contenedor transparente.
+            // Creamos un div interno oculto que no afecte diseño.
+            host: 'https://www.youtube.com',
+            videoId: 'vLWDoovMI1Q',
+            playerVars: {
+                'autoplay': 0,
+                'controls': 0,
+                'disablekb': 1,
+                'fs': 0,
+                'modestbranding': 1,
+                'rel': 0,
+                'showinfo': 0,
+                'iv_load_policy': 3,
+                'loop': 1,       // intentamos loop
+                'playlist': 'vLWDoovMI1Q'  // para loop efectivo
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange,
+                'onError': onPlayerError
             }
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (86400000)) / (3600000));
-            const minutes = Math.floor((diff % 3600000) / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
-            container.innerHTML = `
-                <div class="time-unit"><div class="time-number">${days}</div><div class="time-label">Días</div></div>
-                <div class="time-unit"><div class="time-number">${hours}</div><div class="time-label">Horas</div></div>
-                <div class="time-unit"><div class="time-number">${minutes}</div><div class="time-label">Minutos</div></div>
-                <div class="time-unit"><div class="time-number">${seconds}</div><div class="time-label">Segundos</div></div>
-            `;
+        });
+        
+        // Insertar el reproductor en un contenedor invisible para no afectar diseño
+        const dummyContainer = document.createElement('div');
+        dummyContainer.style.position = 'absolute';
+        dummyContainer.style.top = '-9999px';
+        dummyContainer.style.left = '-9999px';
+        dummyContainer.style.width = '1px';
+        dummyContainer.style.height = '1px';
+        dummyContainer.style.opacity = '0';
+        dummyContainer.style.pointerEvents = 'none';
+        document.body.appendChild(dummyContainer);
+        dummyContainer.id = 'youtubeHiddenContainer';
+        // Dado que el constructor YT.Player crea un iframe en el elemento especificado.
+        // Debemos redirigir: pero la API requiere que el elemento exista. Mejor creamos un div oculto.
+        // Como ya llamamos a YT.Player con 'musicWidget', pero musicWidget es el botón flotante, eso no sirve.
+        // Corregimos: Creamos un elemento oculto 'youtube-player-container' y luego lo usamos
+    };
+    
+    // Mejor enfoque: crear un div oculto y vincular el player allí.
+    let actualPlayer;
+    window.onYouTubeIframeAPIReady = function() {
+        // Crear el contenedor oculto para la API
+        let hiddenDiv = document.createElement('div');
+        hiddenDiv.id = 'youtubeAudioPlayer';
+        hiddenDiv.style.position = 'absolute';
+        hiddenDiv.style.top = '-1000px';
+        hiddenDiv.style.left = '-1000px';
+        hiddenDiv.style.width = '200px';
+        hiddenDiv.style.height = '200px';
+        hiddenDiv.style.opacity = '0';
+        hiddenDiv.style.pointerEvents = 'none';
+        document.body.appendChild(hiddenDiv);
+        
+        actualPlayer = new YT.Player('youtubeAudioPlayer', {
+            videoId: 'vLWDoovMI1Q',
+            playerVars: {
+                'autoplay': 0,
+                'controls': 0,
+                'rel': 0,
+                'showinfo': 0,
+                'modestbranding': 1,
+                'loop': 1,
+                'playlist': 'vLWDoovMI1Q'
+            },
+            events: {
+                'onReady': onActualPlayerReady,
+                'onStateChange': onActualStateChange,
+                'onError': (e) => console.log('Error en YouTube:', e)
+            }
+        });
+    };
+    
+    function onActualPlayerReady(event) {
+        isPlayerReady = true;
+        // Si se desea comenzar reproducción automática suave? Respetamos manual.
+        console.log("✅ Reproductor de YouTube listo - Canción solicitada");
+        // Mostrar en la interfaz que está disponible
+        playPauseButton.disabled = false;
+        playPauseButton.style.opacity = '1';
+    }
+    
+    function onActualStateChange(event) {
+        // Si el video termina, volver a reproducir (loop manual asegurado)
+        if (event.data === YT.PlayerState.ENDED) {
+            if (actualPlayer && isPlayerReady && isPlaying) {
+                actualPlayer.playVideo();
+            }
         }
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        
-        // Música más emotiva y elegante: selección tipo vals/piano vivo (sin copyright)
-        // Se ha elegido una melodía alegre pero cálida (música de piano épica - cortesía de Pixabay)
-        // FUENTE: sonido libre de regalías con ambiente festivo y nostálgico.
-        const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/02/22/audio_dd0a4a0f0a.mp3?filename=inspiring-optimistic-piano-11623.mp3');
-        audio.loop = true;
-        audio.volume = 0.28;
-        let isPlaying = false;
-        const playBtn = document.getElementById("playPauseBtn");
-        const iconMusic = playBtn.querySelector("i");
-        
-        playBtn.addEventListener("click", () => {
-            if (!isPlaying) {
-                audio.play().then(() => {
-                    isPlaying = true;
-                    iconMusic.className = "fas fa-pause";
-                }).catch(() => {
-                    // fallback for autoplay restrictions
-                    audio.play();
-                    isPlaying = true;
-                    iconMusic.className = "fas fa-pause";
-                });
-            } else {
-                audio.pause();
+        // Sincronizar botón según estado
+        if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+            iconPlay.className = "fas fa-pause";
+        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+            if (event.data !== YT.PlayerState.ENDED) {
                 isPlaying = false;
-                iconMusic.className = "fas fa-play";
+                iconPlay.className = "fas fa-play";
             }
-        });
-        
-        // Pequeños detalles: animación sutil y flor en hover a los detalles
-        const detailCards = document.querySelectorAll(".detail-card");
-        detailCards.forEach(card => {
-            card.addEventListener("mouseenter", () => {
-                const icon = card.querySelector("i");
-                if(icon) icon.style.transform = "scale(1.1)";
-            });
-            card.addEventListener("mouseleave", () => {
-                const icon = card.querySelector("i");
-                if(icon) icon.style.transform = "scale(1)";
-            });
-        });
-        
-        // Brillo elegante en el título cada cierto tiempo
-        const title = document.querySelector("h1");
-        if(title) {
-            setInterval(() => {
-                title.style.animation = "softGlow 2.2s infinite ease";
-            }, 150);
         }
-        
-        // efecto más cálido en foto
-        const fotoPerfil = document.querySelector(".foto-enmarcada");
-        if(fotoPerfil) {
-            fotoPerfil.addEventListener("mouseenter", () => fotoPerfil.style.transform = "scale(1.02)");
-            fotoPerfil.addEventListener("mouseleave", () => fotoPerfil.style.transform = "scale(1)");
+        // Si el estado es "buffering" o "cued", no cambiamos el ícono de forma intrusiva
+    }
+    
+    function onPlayerError(error) {
+        console.warn("Error en reproductor YouTube: ", error);
+        // Fallback elegante: muestra un mensaje sutil o simplemente deja el botón pero no afecta experiencia.
+        songTitleSpan.innerText = "🎵 Canción especial (carga)";
+    }
+    
+    // Control manual desde el botón flotante
+    playPauseButton.addEventListener('click', () => {
+        if (!actualPlayer || !isPlayerReady) {
+            // Intento de reintentar carga si la API aún no está lista
+            console.log("Esperando reproductor...");
+            songTitleSpan.innerText = "🎵 Cargando melodía...";
+            return;
         }
-        
-        // muestra de consola elegante
-        console.log("✨ Invitación 50 años Rocío | Hora 3:00 PM | Música especial + confirmación WhatsApp ✨");
-    })();
+        const currentState = actualPlayer.getPlayerState();
+        if (currentState === YT.PlayerState.PLAYING) {
+            actualPlayer.pauseVideo();
+            isPlaying = false;
+            iconPlay.className = "fas fa-play";
+        } else {
+            actualPlayer.playVideo();
+            isPlaying = true;
+            iconPlay.className = "fas fa-pause";
+        }
+    });
+    
+    // Countdown al 6 de Junio 2026 15:00 (CDMX)
+    function updateCountdown() {
+        const target = new Date("June 6, 2026 15:00:00 GMT-0600").getTime(); 
+        const now = new Date().getTime();
+        const diff = target - now;
+        const container = document.getElementById("countdown");
+        if (!container) return;
+        if (diff <= 0) {
+            container.innerHTML = '<div class="time-unit"><div class="time-number">🎉✨</div><div class="time-label">¡Hoy es el día!</div></div><div class="time-unit"><div class="time-number">Celebremos</div><div class="time-label">Con Alegría</div></div>';
+            return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (86400000)) / (3600000));
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        container.innerHTML = `
+            <div class="time-unit"><div class="time-number">${days}</div><div class="time-label">Días</div></div>
+            <div class="time-unit"><div class="time-number">${hours}</div><div class="time-label">Horas</div></div>
+            <div class="time-unit"><div class="time-number">${minutes}</div><div class="time-label">Minutos</div></div>
+            <div class="time-unit"><div class="time-number">${seconds}</div><div class="time-label">Segundos</div></div>
+        `;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Pequeños detalles interactivos
+    const detailCards = document.querySelectorAll(".detail-card");
+    detailCards.forEach(card => {
+        card.addEventListener("mouseenter", () => {
+            const icon = card.querySelector("i");
+            if(icon) icon.style.transform = "scale(1.1)";
+        });
+        card.addEventListener("mouseleave", () => {
+            const icon = card.querySelector("i");
+            if(icon) icon.style.transform = "scale(1)";
+        });
+    });
+    
+    const title = document.querySelector("h1");
+    if(title) {
+        setInterval(() => {
+            title.style.animation = "softGlow 2.2s infinite ease";
+        }, 150);
+    }
+    
+    const fotoPerfil = document.querySelector(".foto-enmarcada");
+    if(fotoPerfil) {
+        fotoPerfil.addEventListener("mouseenter", () => fotoPerfil.style.transform = "scale(1.02)");
+        fotoPerfil.addEventListener("mouseleave", () => fotoPerfil.style.transform = "scale(1)");
+    }
+    
+    // indicador consola
+    console.log("✨ Invitación 50 años Rocío | Música: canción de YouTube especial (vLWDoovMI1Q) | Confirmación WhatsApp ✨");
 </script>
 </body>
 </html>
